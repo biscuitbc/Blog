@@ -1,13 +1,16 @@
 :root {
   color-scheme: dark;
-  --background: #1b1d1e;
-  --text: #c7c7c7;
-  --text-strong: #e5e5e5;
-  --muted: #8a8a8a;
-  --line: #343638;
-  --accent: #2bc69d;
-  --code-background: #242627;
-  --mono: "SFMono-Regular", "Cascadia Code", "Roboto Mono", Consolas, "Liberation Mono", monospace;
+  --background: #191918;
+  --surface: #20201e;
+  --text: #d7d2c8;
+  --text-strong: #f0ece3;
+  --muted: #8d887f;
+  --line: #35332f;
+  --accent: #d2a15f;
+  --code-background: #22221f;
+  --sans: Inter, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", Georgia, serif;
+  --mono: "SFMono-Regular", "Cascadia Code", Consolas, monospace;
 }
 
 *,
@@ -27,61 +30,69 @@ body {
   margin: 0;
   color: var(--text);
   background: var(--background);
-  font-family: var(--mono);
-  font-size: 15px;
-  line-height: 1.8;
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.75;
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  color: var(--background);
+  color: #191918;
   background: var(--accent);
 }
 
 a {
   color: inherit;
-  text-underline-offset: 0.2em;
+  text-decoration: none;
+  text-underline-offset: 0.22em;
 }
 
 a:hover {
   color: var(--accent);
 }
 
-button,
-input {
-  font: inherit;
-}
-
 .shell {
-  width: min(720px, calc(100% - 40px));
+  width: min(880px, calc(100% - 48px));
   margin-inline: auto;
 }
 
 .page-main {
-  min-height: calc(100vh - 245px);
+  min-height: calc(100vh - 220px);
 }
 
 .page-heading {
-  margin: 0 0 1.75rem;
-  color: var(--accent);
-  font-size: 1.45rem;
-  font-weight: 600;
+  margin: 0;
+  color: var(--text-strong);
+  font-size: clamp(1.8rem, 5vw, 2.7rem);
+  font-weight: 650;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
 }
 
 .page-intro {
-  margin-bottom: 3.5rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 2rem;
+  margin: 3rem 0 3.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--line);
 }
 
 .page-intro h1 {
-  margin: 0 0 1rem;
+  margin: 0;
   color: var(--text-strong);
-  font-size: 1.75rem;
-  line-height: 1.4;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  font-weight: 650;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
 }
 
 .page-intro p {
-  margin: 0;
+  margin: 0 0 0.2rem;
   color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.72rem;
 }
 
 .tag {
@@ -90,71 +101,81 @@ input {
 
 .empty-state {
   color: var(--muted);
+  font-family: var(--serif);
 }
 
 .prose {
   color: var(--text);
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  line-height: 1.95;
   overflow-wrap: anywhere;
 }
 
 .prose h2,
 .prose h3,
 .prose h4 {
-  margin: 2.6rem 0 1rem;
+  margin: 2.8rem 0 1rem;
   color: var(--text-strong);
+  font-family: var(--sans);
+  letter-spacing: -0.02em;
   line-height: 1.45;
 }
 
 .prose h2 {
-  font-size: 1.35rem;
+  font-size: 1.5rem;
 }
 
 .prose h3 {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
 
 .prose p,
 .prose ul,
 .prose ol {
-  margin: 1rem 0;
+  margin: 1.15rem 0;
 }
 
 .prose a {
   color: var(--accent);
+  text-decoration: underline;
 }
 
 .prose blockquote {
-  margin: 1.5rem 0;
-  padding-left: 1rem;
+  margin: 1.8rem 0;
+  padding: 0.15rem 0 0.15rem 1.2rem;
   border-left: 2px solid var(--accent);
   color: var(--muted);
 }
 
 .prose code {
   padding: 0.12rem 0.35rem;
+  border: 1px solid var(--line);
   border-radius: 3px;
   background: var(--code-background);
-  font-family: inherit;
-  font-size: 0.9em;
+  font-family: var(--mono);
+  font-size: 0.86em;
 }
 
 .prose pre {
   overflow-x: auto;
-  margin: 1.5rem 0;
-  padding: 1rem 1.1rem;
+  margin: 1.8rem 0;
+  padding: 1.1rem 1.2rem;
   border: 1px solid var(--line);
   border-radius: 4px;
   background: var(--code-background);
+  font-family: var(--mono);
   line-height: 1.65;
 }
 
 .prose pre code {
   padding: 0;
+  border: 0;
   background: transparent;
 }
 
 .prose hr {
-  margin: 2.5rem 0;
+  margin: 3rem 0;
   border: 0;
   border-top: 1px solid var(--line);
 }
@@ -174,12 +195,22 @@ input {
   transform: translateY(0);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
   body {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .shell {
-    width: min(100% - 28px, 720px);
+    width: min(100% - 30px, 880px);
+  }
+
+  .page-intro {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+    margin-top: 2rem;
+  }
+
+  .page-intro p {
+    grid-row: 1;
   }
 }

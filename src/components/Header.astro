@@ -4,72 +4,94 @@ import { site } from "../config/site";
 const pathname = Astro.url.pathname;
 const nav = [
   { href: "/", label: "首页" },
-  { href: "/about/", label: "关于" },
-  { href: "/posts/", label: "归档" },
+  { href: "/posts/", label: "文章" },
   { href: "/tags/", label: "标签" },
+  { href: "/about/", label: "关于" },
 ];
 ---
 
-<header class="site-header shell">
-  <a class="site-title" href="/">{site.title}</a>
-  <nav aria-label="主导航">
-    {
-      nav.map((item) => (
-        <a
-          class:list={{ active: item.href === "/" ? pathname === "/" : pathname.startsWith(item.href) }}
-          href={item.href}
-        >
-          {item.label}
-        </a>
-      ))
-    }
-  </nav>
+<header class="site-header">
+  <div class="shell header-inner">
+    <a class="site-title" href="/">{site.title}</a>
+    <nav aria-label="主导航">
+      {
+        nav.map((item) => (
+          <a
+            class:list={{ active: item.href === "/" ? pathname === "/" : pathname.startsWith(item.href) }}
+            href={item.href}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
 </header>
 
 <style>
   .site-header {
-    padding-top: 4rem;
-    padding-bottom: 3rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    min-height: 78px;
   }
 
   .site-title {
     color: var(--text-strong);
-    font-size: 1.7rem;
+    font-size: 1.15rem;
     font-weight: 700;
-    text-decoration: none;
+    letter-spacing: -0.015em;
   }
 
   nav {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem 0;
-    margin-top: 0.15rem;
+    align-items: center;
+    gap: 1.5rem;
   }
 
   nav a {
-    color: var(--accent);
-    font-size: 0.86rem;
-    text-decoration: none;
-  }
-
-  nav a:not(:last-child)::after {
-    margin: 0 0.65rem;
+    position: relative;
     color: var(--muted);
-    content: "|";
+    font-size: 0.82rem;
   }
 
+  nav a::after {
+    position: absolute;
+    right: 0;
+    bottom: -0.45rem;
+    left: 0;
+    height: 1px;
+    transform: scaleX(0);
+    background: var(--accent);
+    content: "";
+  }
+
+  nav a:hover,
   nav a.active {
-    text-decoration: underline;
+    color: var(--text-strong);
+  }
+
+  nav a.active::after {
+    transform: scaleX(1);
   }
 
   @media (max-width: 600px) {
-    .site-header {
-      padding-top: 2.5rem;
-      padding-bottom: 2.5rem;
+    .header-inner {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.8rem;
+      padding: 1.25rem 0 1rem;
     }
 
-    .site-title {
-      font-size: 1.4rem;
+    nav {
+      width: 100%;
+      justify-content: space-between;
+      gap: 0.5rem;
     }
   }
 </style>

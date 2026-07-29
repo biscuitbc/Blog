@@ -3,46 +3,46 @@ import { site } from "../config/site";
 const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer shell">
-  <span>© {year} {site.author}</span>
-  <nav aria-label="页脚导航">
-    <a href="/">首页</a>
-    <a href="/about/">关于</a>
-    <a href="/posts/">归档</a>
-    <a href="/tags/">标签</a>
-    <a href="/rss.xml">RSS</a>
-  </nav>
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span>© {year} {site.author}</span>
+    <div>
+      <a href="/rss.xml">RSS</a>
+      <a href={site.mainSite} target="_blank" rel="noreferrer">主站 ↗</a>
+      <a href={site.github} target="_blank" rel="noreferrer">GitHub ↗</a>
+    </div>
+  </div>
 </footer>
 
 <style>
   .site-footer {
+    margin-top: 6rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .footer-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    margin-top: 6rem;
-    padding-top: 1.5rem;
-    padding-bottom: 2rem;
-    border-top: 1px solid var(--line);
+    min-height: 92px;
     color: var(--muted);
-    font-size: 0.75rem;
+    font-family: var(--mono);
+    font-size: 0.68rem;
   }
 
-  nav {
+  .footer-inner div {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.8rem;
+    gap: 1rem;
   }
 
-  nav a {
-    text-decoration: none;
-  }
-
-  @media (max-width: 600px) {
-    .site-footer {
+  @media (max-width: 560px) {
+    .footer-inner {
       align-items: flex-start;
       flex-direction: column;
-      margin-top: 4rem;
+      justify-content: center;
+      gap: 0.45rem;
     }
   }
 </style>

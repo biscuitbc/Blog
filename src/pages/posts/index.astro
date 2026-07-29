@@ -13,6 +13,6 @@ const posts = sortPosts((await getCollection("posts")).filter(isPublished));
     <p>共 {posts.length} 篇文章</p>
   </header>
   <section>
-    {posts.length > 0 ? posts.map((post, index) => <PostCard post={post} index={index} />) : <p class="empty-state">还没有公开文章。</p>}
+    {posts.length > 0 ? posts.map((post, index) => <PostCard post={post} index={index} />) : <p class="empty-state">暂无文章。</p>}
   </section>
 </BaseLayout>

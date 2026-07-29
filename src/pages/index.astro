@@ -2,21 +2,12 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PostCard from "../components/PostCard.astro";
-import { site } from "../config/site";
 import { isPublished, sortPosts } from "../utils/posts";
 
 const posts = sortPosts((await getCollection("posts")).filter(isPublished));
 ---
 
 <BaseLayout>
-  <section class="intro">
-    <div>
-      <p class="kicker">BISCUITBC / NOTES</p>
-      <h1>写下正在发生的思考。</h1>
-    </div>
-    <p class="description">{site.description}</p>
-  </section>
-
   <section class="posts-section">
     <div class="section-heading">
       <h2>最近文章</h2>
@@ -25,49 +16,14 @@ const posts = sortPosts((await getCollection("posts")).filter(isPublished));
     {
       posts.length > 0
         ? posts.slice(0, 8).map((post, index) => <PostCard post={post} index={index} />)
-        : <p class="empty-state">还没有公开文章。</p>
+        : <p class="empty-state">暂无文章。</p>
     }
   </section>
 </BaseLayout>
 
 <style>
-  .intro {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: clamp(2rem, 7vw, 6rem);
-    align-items: end;
-    padding: clamp(4.5rem, 10vw, 7rem) 0;
-  }
-
-  .kicker {
-    margin: 0 0 0.8rem;
-    color: var(--accent);
-    font-family: var(--mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.13em;
-  }
-
-  h1 {
-    max-width: 520px;
-    margin: 0;
-    color: var(--text-strong);
-    font-size: clamp(2.35rem, 7vw, 4.6rem);
-    font-weight: 680;
-    letter-spacing: -0.06em;
-    line-height: 1.08;
-  }
-
-  .description {
-    margin: 0 0 0.4rem;
-    padding-left: 1.2rem;
-    border-left: 2px solid var(--accent);
-    color: var(--muted);
-    font-family: var(--serif);
-    font-size: 0.95rem;
-  }
-
   .posts-section {
-    padding-top: 1rem;
+    padding-top: clamp(3.5rem, 8vw, 6rem);
   }
 
   .section-heading {
@@ -89,15 +45,4 @@ const posts = sortPosts((await getCollection("posts")).filter(isPublished));
     font-size: 0.75rem;
   }
 
-  @media (max-width: 650px) {
-    .intro {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-      padding: 4rem 0;
-    }
-
-    .description {
-      max-width: 460px;
-    }
-  }
 </style>

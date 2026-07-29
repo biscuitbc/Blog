@@ -7,13 +7,22 @@ import { site } from "../config/site";
   <header class="page-intro">
     <h1>关于</h1>
   </header>
-  <div class="prose">
-    <p>你好，我是 biscuitbc。</p>
-    <p>这里用来记录正在学习、构建和思考的事情，内容可能包括代码、研究、工具与日常观察。</p>
-    <p>
-      你可以访问<a href={site.mainSite} target="_blank" rel="noreferrer">我的个人主页</a>，
-      或在 <a href={site.github} target="_blank" rel="noreferrer">GitHub</a> 查看公开项目。
-    </p>
-    <p><a href="/rss.xml">订阅 RSS</a></p>
-  </div>
+  <ul class="links">
+    <li><a href={site.mainSite} target="_blank" rel="noreferrer">个人主页 ↗</a></li>
+    <li><a href={site.github} target="_blank" rel="noreferrer">GitHub ↗</a></li>
+    <li><a href="/rss.xml">RSS</a></li>
+  </ul>
 </BaseLayout>
+
+<style>
+  .links {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .links li {
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+</style>

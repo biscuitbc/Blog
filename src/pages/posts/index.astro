@@ -7,19 +7,12 @@ import { isPublished, sortPosts } from "../../utils/posts";
 const posts = sortPosts((await getCollection("posts")).filter(isPublished));
 ---
 
-<BaseLayout title="所有文章" description="Biscuit Blog 的全部文章。">
-  <header class="page-intro shell">
-    <p class="eyebrow">ARCHIVE · {String(posts.length).padStart(2, "0")}</p>
-    <h1 class="display-title">所有文章</h1>
-    <p>按时间整理的写作存档。新的在前，旧的也不急着遗忘。</p>
+<BaseLayout title="归档" description="全部文章归档。">
+  <header class="page-intro">
+    <h1>归档</h1>
+    <p>共 {posts.length} 篇文章</p>
   </header>
-  <section class="post-list shell">
-    {posts.length > 0 ? posts.map((post, index) => <PostCard post={post} index={index} />) : <p class="empty-state">还没有公开文章。</p>}
+  <section>
+    {posts.length > 0 ? posts.map((post) => <PostCard post={post} />) : <p class="empty-state">还没有公开文章。</p>}
   </section>
 </BaseLayout>
-
-<style>
-  .post-list {
-    padding-top: 3rem;
-  }
-</style>

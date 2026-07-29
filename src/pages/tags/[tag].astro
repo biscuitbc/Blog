@@ -19,19 +19,12 @@ export async function getStaticPaths() {
 const { tag, posts } = Astro.props;
 ---
 
-<BaseLayout title={`标签：${tag}`} description={`Biscuit Blog 中关于“${tag}”的文章。`}>
-  <header class="page-intro shell">
-    <p class="eyebrow">TOPIC · {String(posts.length).padStart(2, "0")} POSTS</p>
-    <h1 class="display-title">{tag}</h1>
-    <p>这个关键词下的全部文章。</p>
+<BaseLayout title={`标签：${tag}`} description={`标签“${tag}”下的文章。`}>
+  <header class="page-intro">
+    <h1>标签：{tag}</h1>
+    <p>共 {posts.length} 篇文章</p>
   </header>
-  <section class="post-list shell">
-    {posts.map((post, index) => <PostCard post={post} index={index} />)}
+  <section>
+    {posts.map((post) => <PostCard post={post} />)}
   </section>
 </BaseLayout>
-
-<style>
-  .post-list {
-    padding-top: 3rem;
-  }
-</style>

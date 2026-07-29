@@ -11,70 +11,42 @@ const counts = posts.reduce<Record<string, number>>((result, post) => {
 const tags = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "zh-CN"));
 ---
 
-<BaseLayout title="标签" description="按主题浏览 Biscuit Blog。">
-  <header class="page-intro shell">
-    <p class="eyebrow">TOPICS · {String(tags.length).padStart(2, "0")}</p>
-    <h1 class="display-title">标签</h1>
-    <p>思想不会严格分类，但关键词可以帮助我们再次找到它们。</p>
+<BaseLayout title="标签" description="文章标签。">
+  <header class="page-intro">
+    <h1>标签</h1>
+    <p>共 {tags.length} 个标签</p>
   </header>
-  <section class="tag-cloud shell">
-    {tags.map(([tag, count], index) => (
-      <a href={`/tags/${tagSlug(tag)}/`}>
-        <span>{String(index + 1).padStart(2, "0")}</span>
-        <strong>{tag}</strong>
-        <small>{count} 篇</small>
-        <i aria-hidden="true">↗</i>
-      </a>
+  <ul class="tag-list">
+    {tags.map(([tag, count]) => (
+      <li>
+        <a href={`/tags/${tagSlug(tag)}/`}>{tag}</a>
+        <span>{count}</span>
+      </li>
     ))}
-  </section>
+  </ul>
 </BaseLayout>
 
 <style>
-  .tag-cloud {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0 3rem;
-    padding-top: 4rem;
+  .tag-list {
+    max-width: 420px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
-  .tag-cloud a {
-    display: grid;
-    grid-template-columns: 36px 1fr auto auto;
-    align-items: center;
+  .tag-list li {
+    display: flex;
+    justify-content: space-between;
     gap: 1rem;
-    padding: 1.5rem 0;
-    border-bottom: 1px solid var(--line);
+    padding: 0.55rem 0;
+    border-bottom: 1px dotted var(--line);
   }
 
-  .tag-cloud span,
-  .tag-cloud small {
-    color: var(--faint);
-    font-family: var(--mono);
-    font-size: 0.65rem;
-  }
-
-  .tag-cloud strong {
-    font-family: var(--serif);
-    font-size: 1.25rem;
-  }
-
-  .tag-cloud i {
-    color: var(--muted);
-    font-style: normal;
-    transition: transform 160ms ease;
-  }
-
-  .tag-cloud a:hover {
+  .tag-list a {
     color: var(--accent);
   }
 
-  .tag-cloud a:hover i {
-    transform: translate(2px, -2px);
-  }
-
-  @media (max-width: 700px) {
-    .tag-cloud {
-      grid-template-columns: 1fr;
-    }
+  .tag-list span {
+    color: var(--muted);
   }
 </style>

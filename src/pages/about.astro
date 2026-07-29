@@ -4,84 +4,16 @@ import { site } from "../config/site";
 ---
 
 <BaseLayout title="关于" description={`关于 ${site.title}。`}>
-  <header class="page-intro shell">
-    <p class="eyebrow">ABOUT THIS PLACE</p>
-    <h1 class="display-title">关于</h1>
-    <p>一个不追赶热点的小型数字花园。</p>
+  <header class="page-intro">
+    <h1>关于</h1>
   </header>
-
-  <section class="about-grid shell">
-    <div class="about-aside">
-      <span class="big-b" aria-hidden="true">B</span>
-      <p>EST. 2026<br />SOMEWHERE ONLINE</p>
-    </div>
-    <div class="about-copy prose">
-      <h2>你好，我是 Biscuit。</h2>
-      <p>这里用来记录我正在学习、构建和思考的事情。内容可能横跨代码、研究、工具与日常观察，但判断一篇文章是否值得留下的标准很简单：它是否让某件事变得更清楚了一点。</p>
-      <p>博客是一种慢媒介。我希望这里的文字不依赖短暂的热度，过一段时间再读，仍然有一点用。</p>
-
-      <h2>联系与订阅</h2>
-      <p>
-        你可以访问<a href={site.mainSite} target="_blank" rel="noreferrer">我的个人主页</a>，
-        在 <a href={site.github} target="_blank" rel="noreferrer">GitHub</a> 查看公开项目，
-        或通过 <a href="/rss.xml">RSS</a> 订阅更新。
-      </p>
-    </div>
-  </section>
+  <div class="prose">
+    <p>你好，我是 biscuitbc。</p>
+    <p>这里用来记录正在学习、构建和思考的事情，内容可能包括代码、研究、工具与日常观察。</p>
+    <p>
+      你可以访问<a href={site.mainSite} target="_blank" rel="noreferrer">我的个人主页</a>，
+      或在 <a href={site.github} target="_blank" rel="noreferrer">GitHub</a> 查看公开项目。
+    </p>
+    <p><a href="/rss.xml">订阅 RSS</a></p>
+  </div>
 </BaseLayout>
-
-<style>
-  .about-grid {
-    display: grid;
-    grid-template-columns: 0.65fr 1.35fr;
-    gap: clamp(3rem, 9vw, 8rem);
-    padding-top: 5rem;
-  }
-
-  .about-aside {
-    align-self: start;
-    padding: 2rem;
-    border: 1px solid var(--line);
-    background: var(--paper-raised);
-    box-shadow: var(--shadow);
-  }
-
-  .big-b {
-    display: block;
-    color: var(--accent);
-    font-family: var(--serif);
-    font-size: clamp(7rem, 18vw, 13rem);
-    font-style: italic;
-    line-height: 0.8;
-  }
-
-  .about-aside p {
-    margin: 2.5rem 0 0;
-    color: var(--faint);
-    font-family: var(--mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.12em;
-  }
-
-  .about-copy {
-    width: 100%;
-    margin: 0;
-  }
-
-  @media (max-width: 720px) {
-    .about-grid {
-      grid-template-columns: 1fr;
-      padding-top: 3rem;
-    }
-
-    .about-aside {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-    }
-
-    .big-b {
-      font-size: 7rem;
-    }
-  }
-</style>

@@ -1,5 +1,5 @@
 ---
-title: "欢迎来到 Biscuit Blog"
+title: "欢迎来到 biscuitbc's Blog"
 description: "第一篇文章，也是这个数字花园的起点。关于为什么写、准备写什么，以及如何继续。"
 publishedAt: 2026-07-29
 tags: ["随笔", "写作"]

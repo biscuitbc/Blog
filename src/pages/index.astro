@@ -2,332 +2,41 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PostCard from "../components/PostCard.astro";
-import { isPublished, sortPosts, tagSlug } from "../utils/posts";
+import { site } from "../config/site";
+import { isPublished, sortPosts } from "../utils/posts";
 
 const posts = sortPosts((await getCollection("posts")).filter(isPublished));
-const featured = posts.find((post) => post.data.featured) ?? posts[0];
-const remaining = posts.filter((post) => post.id !== featured?.id).slice(0, 4);
-const tags = [...new Set(posts.flatMap((post) => post.data.tags))].slice(0, 8);
+const siteDescription = site.description;
 ---
 
 <BaseLayout>
-  <section class="hero shell">
-    <div class="hero-copy">
-      <p class="eyebrow">NOTES · IDEAS · FIELDWORK</p>
-      <h1 class="display-title">慢慢写，<br /><em>认真想。</em></h1>
-      <p class="hero-intro">记录研究、代码与日常里值得反复咀嚼的东西。这里不追赶信息，只留下经过思考的痕迹。</p>
-    </div>
-    <aside class="hero-aside">
-      <div class="orbit" aria-hidden="true">
-        <span class="orbit-ring"></span>
-        <span class="orbit-dot"></span>
-        <strong>B</strong>
-      </div>
-      <p><span>当前主题</span>保持好奇，持续构建</p>
-      <p><span>更新节奏</span>不定期，但尽量诚实</p>
-    </aside>
-    <div class="hero-index" aria-hidden="true">ISSUE<br />001</div>
-  </section>
+  <p class="tagline">「{siteDescription}」</p>
 
-  {
-    featured && (
-      <section class="featured-section shell">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">EDITOR'S PICK</p>
-            <h2 class="section-title">置顶阅读</h2>
-          </div>
-          <span class="feature-line" aria-hidden="true"></span>
-        </div>
-        <PostCard post={featured} featured index={0} />
-      </section>
-    )
-  }
-
-  <section class="latest-section shell">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">RECENTLY PUBLISHED</p>
-        <h2 class="section-title">最近文章</h2>
-      </div>
-      <a href="/posts/">查看全部文章</a>
-    </div>
+  <section>
+    <h1 class="page-heading">文章</h1>
     {
-      remaining.length > 0
-        ? remaining.map((post, index) => <PostCard post={post} index={index + 1} />)
-        : <p class="empty-state">下一篇文章正在路上。</p>
+      posts.length > 0
+        ? posts.slice(0, 10).map((post) => <PostCard post={post} />)
+        : <p class="empty-state">还没有公开文章。</p>
     }
-  </section>
-
-  <section class="topics shell">
-    <div>
-      <p class="eyebrow">BROWSE BY TOPIC</p>
-      <h2 class="section-title">从一个关键词开始</h2>
-    </div>
-    <div class="topic-list">
-      {tags.map((tag, index) => (
-        <a href={`/tags/${tagSlug(tag)}/`}>
-          <span>{String(index + 1).padStart(2, "0")}</span>
-          {tag}
-          <i aria-hidden="true">↗</i>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <section class="manifesto shell">
-    <p>“</p>
-    <blockquote>写作不是为了把每件事都解释清楚，而是为了看见自己究竟在想什么。</blockquote>
-    <span>— 关于这个博客</span>
+    {posts.length > 10 && <p class="more"><a href="/posts/">... 查看更多 &gt;</a></p>}
   </section>
 </BaseLayout>
 
 <style>
-  .hero {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1.65fr) minmax(250px, 0.75fr);
-    gap: 4rem;
-    min-height: min(730px, calc(100vh - 72px));
-    padding-top: clamp(5rem, 12vw, 9.5rem);
-    padding-bottom: 5rem;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .hero-copy {
-    align-self: start;
-  }
-
-  .hero h1 em {
-    color: var(--accent);
-    font-weight: inherit;
-  }
-
-  .hero-intro {
-    max-width: 570px;
-    margin: 2.2rem 0 0;
+  .tagline {
+    margin: 0 0 3rem;
     color: var(--muted);
-    font-family: var(--serif);
-    font-size: clamp(1.05rem, 2vw, 1.3rem);
-  }
-
-  .hero-aside {
-    align-self: center;
-    padding: 2rem 0 0 2rem;
-    border-left: 1px solid var(--line);
-  }
-
-  .hero-aside p {
-    margin: 1.1rem 0 0;
-    color: var(--muted);
-    font-family: var(--serif);
     font-size: 0.85rem;
   }
 
-  .hero-aside p span {
-    display: block;
-    margin-bottom: 0.15rem;
-    color: var(--faint);
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+  .more {
+    margin: 2rem 0 0 108px;
   }
 
-  .orbit {
-    position: relative;
-    display: grid;
-    width: 150px;
-    height: 150px;
-    margin-bottom: 2.2rem;
-    place-items: center;
-  }
-
-  .orbit-ring {
-    position: absolute;
-    inset: 8px;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-  }
-
-  .orbit-ring::before {
-    position: absolute;
-    inset: 18px;
-    border: 1px dashed var(--line);
-    border-radius: 50%;
-    content: "";
-  }
-
-  .orbit-dot {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--mark);
-    box-shadow: 0 0 0 6px color-mix(in srgb, var(--mark) 16%, transparent);
-  }
-
-  .orbit strong {
-    font-family: var(--serif);
-    font-size: 3.5rem;
-    font-style: italic;
-  }
-
-  .hero-index {
-    position: absolute;
-    right: 0;
-    bottom: 1.5rem;
-    color: var(--faint);
-    font-family: var(--mono);
-    font-size: 0.58rem;
-    letter-spacing: 0.1em;
-    line-height: 1.5;
-    text-align: right;
-  }
-
-  .featured-section,
-  .latest-section {
-    padding-top: 7rem;
-  }
-
-  .feature-line {
-    flex: 1;
-    height: 1px;
-    margin-bottom: 0.4rem;
-    background: var(--line);
-  }
-
-  .topics {
-    display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
-    gap: 5rem;
-    margin-top: 8rem;
-    padding: 4rem 0;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .topic-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    align-content: start;
-    column-gap: 2rem;
-  }
-
-  .topic-list a {
-    display: grid;
-    grid-template-columns: 32px 1fr auto;
-    align-items: center;
-    gap: 0.8rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--line);
-    font-family: var(--serif);
-  }
-
-  .topic-list a span {
-    color: var(--faint);
-    font-family: var(--mono);
-    font-size: 0.62rem;
-  }
-
-  .topic-list a i {
-    color: var(--faint);
-    font-style: normal;
-    transition: transform 160ms ease;
-  }
-
-  .topic-list a:hover {
-    color: var(--accent);
-  }
-
-  .topic-list a:hover i {
-    transform: translate(2px, -2px);
-  }
-
-  .manifesto {
-    position: relative;
-    max-width: 840px;
-    margin-top: 8rem;
-    text-align: center;
-  }
-
-  .manifesto > p {
-    height: 2rem;
-    margin: 0;
-    color: var(--mark);
-    font-family: var(--serif);
-    font-size: 5rem;
-    line-height: 1;
-  }
-
-  .manifesto blockquote {
-    margin: 1rem 0;
-    font-family: var(--serif);
-    font-size: clamp(1.45rem, 4vw, 2.7rem);
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    line-height: 1.5;
-  }
-
-  .manifesto span {
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: 0.7rem;
-  }
-
-  @media (max-width: 760px) {
-    .hero {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-      min-height: auto;
-      padding-top: 5rem;
-    }
-
-    .hero-aside {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      column-gap: 1.5rem;
-      align-items: center;
-      padding: 1.5rem 0 0;
-      border-top: 1px solid var(--line);
-      border-left: 0;
-    }
-
-    .orbit {
-      grid-row: span 2;
-      width: 90px;
-      height: 90px;
-      margin: 0;
-    }
-
-    .orbit strong {
-      font-size: 2.3rem;
-    }
-
-    .hero-aside p {
-      margin: 0.35rem 0;
-    }
-
-    .featured-section,
-    .latest-section {
-      padding-top: 5rem;
-    }
-
-    .topics {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-      margin-top: 5rem;
-      padding: 3rem 0;
-    }
-
-    .topic-list {
-      grid-template-columns: 1fr;
-    }
-
-    .manifesto {
-      margin-top: 5rem;
+  @media (max-width: 560px) {
+    .more {
+      margin-left: 0;
     }
   }
 </style>

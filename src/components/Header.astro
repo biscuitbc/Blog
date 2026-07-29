@@ -4,235 +4,72 @@ import { site } from "../config/site";
 const pathname = Astro.url.pathname;
 const nav = [
   { href: "/", label: "首页" },
-  { href: "/posts/", label: "文章" },
-  { href: "/tags/", label: "标签" },
   { href: "/about/", label: "关于" },
+  { href: "/posts/", label: "归档" },
+  { href: "/tags/", label: "标签" },
 ];
 ---
 
-<header class="site-header">
-  <div class="shell header-inner">
-    <a class="brand" href="/" aria-label={`${site.title} 首页`}>
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span>{site.shortTitle}</span>
-      <small>/ BLOG</small>
-    </a>
-
-    <nav aria-label="主导航">
-      {
-        nav.map((item) => (
-          <a
-            class:list={{ active: item.href === "/" ? pathname === "/" : pathname.startsWith(item.href) }}
-            href={item.href}
-          >
-            {item.label}
-          </a>
-        ))
-      }
-    </nav>
-
-    <div class="header-actions">
-      <a class="home-link" href={site.mainSite} target="_blank" rel="noreferrer">
-        主站
-        <span aria-hidden="true">↗</span>
-      </a>
-      <button class="theme-toggle" type="button" aria-label="切换深浅色主题" title="切换主题">
-        <svg class="sun" viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="12" cy="12" r="3.5"></circle>
-          <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path>
-        </svg>
-        <svg class="moon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M20 15.2A8 8 0 0 1 8.8 4a8.2 8.2 0 1 0 11.2 11.2Z"></path>
-        </svg>
-      </button>
-    </div>
-  </div>
+<header class="site-header shell">
+  <a class="site-title" href="/">{site.title}</a>
+  <nav aria-label="主导航">
+    {
+      nav.map((item) => (
+        <a
+          class:list={{ active: item.href === "/" ? pathname === "/" : pathname.startsWith(item.href) }}
+          href={item.href}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
 </header>
-
-<script is:inline>
-  const button = document.querySelector(".theme-toggle");
-  const root = document.documentElement;
-  const setTheme = (theme) => {
-    root.dataset.theme = theme;
-    localStorage.setItem("biscuit-theme", theme);
-  };
-  button?.addEventListener("click", () => {
-    setTheme(root.dataset.theme === "dark" ? "light" : "dark");
-  });
-</script>
 
 <style>
   .site-header {
-    position: sticky;
-    z-index: 20;
-    top: 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--line) 85%, transparent);
-    background: color-mix(in srgb, var(--paper) 88%, transparent);
-    backdrop-filter: blur(16px);
+    padding-top: 4rem;
+    padding-bottom: 3rem;
   }
 
-  .header-inner {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    min-height: 72px;
-  }
-
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    width: max-content;
-    font-size: 0.92rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-  }
-
-  .brand small {
-    color: var(--faint);
-    font-family: var(--mono);
-    font-size: 0.62rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-  }
-
-  .brand-mark {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--mark);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--mark) 18%, transparent);
+  .site-title {
+    color: var(--text-strong);
+    font-size: 1.7rem;
+    font-weight: 700;
+    text-decoration: none;
   }
 
   nav {
     display: flex;
-    align-items: center;
-    gap: 1.6rem;
+    flex-wrap: wrap;
+    gap: 0.3rem 0;
+    margin-top: 0.15rem;
   }
 
   nav a {
-    position: relative;
-    padding: 0.25rem 0;
-    color: var(--muted);
-    font-size: 0.82rem;
-    font-weight: 600;
-  }
-
-  nav a::after {
-    position: absolute;
-    right: 0;
-    bottom: -0.35rem;
-    left: 0;
-    height: 1px;
-    transform: scaleX(0);
-    background: var(--accent);
-    content: "";
-    transition: transform 160ms ease;
-  }
-
-  nav a:hover,
-  nav a.active {
-    color: var(--ink);
-  }
-
-  nav a.active::after {
-    transform: scaleX(1);
-  }
-
-  .header-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0.9rem;
-  }
-
-  .home-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: var(--muted);
-    font-size: 0.78rem;
-  }
-
-  .home-link:hover {
     color: var(--accent);
+    font-size: 0.86rem;
+    text-decoration: none;
   }
 
-  .theme-toggle {
-    display: grid;
-    width: 34px;
-    height: 34px;
-    padding: 0;
-    place-items: center;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    background: transparent;
-    cursor: pointer;
+  nav a:not(:last-child)::after {
+    margin: 0 0.65rem;
+    color: var(--muted);
+    content: "|";
   }
 
-  .theme-toggle:hover {
-    border-color: var(--faint);
-    background: var(--paper-raised);
+  nav a.active {
+    text-decoration: underline;
   }
 
-  .theme-toggle svg {
-    width: 15px;
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 1.7;
-  }
-
-  .moon,
-  :global(:root[data-theme="dark"]) .sun {
-    display: none;
-  }
-
-  :global(:root[data-theme="dark"]) .moon {
-    display: block;
-  }
-
-  @media (max-width: 760px) {
+  @media (max-width: 600px) {
     .site-header {
-      background: var(--paper);
-      backdrop-filter: none;
+      padding-top: 2.5rem;
+      padding-bottom: 2.5rem;
     }
 
-    .header-inner {
-      grid-template-columns: 1fr auto;
-    }
-
-    nav {
-      position: fixed;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 30;
-      justify-content: space-around;
-      gap: 0;
-      min-height: 58px;
-      padding: 0 0.6rem env(safe-area-inset-bottom);
-      border-top: 1px solid var(--line);
-      background: color-mix(in srgb, var(--paper) 92%, transparent);
-      backdrop-filter: blur(16px);
-    }
-
-    nav a {
-      padding: 1rem 0.8rem;
-      font-size: 0.76rem;
-    }
-
-    nav a::after {
-      bottom: 0.55rem;
-    }
-
-    .home-link {
-      display: none;
-    }
-
-    .brand small {
-      display: none;
+    .site-title {
+      font-size: 1.4rem;
     }
   }
 </style>

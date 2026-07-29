@@ -1,32 +1,23 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import ArchiveList from "../../components/ArchiveList.astro";
+import Pagination from "../../components/Pagination.astro";
 import { isPublished, sortPosts } from "../../utils/posts";
 
 const posts = sortPosts((await getCollection("posts")).filter(isPublished));
+const pageSize = 10;
+const totalPages = Math.max(1, Math.ceil(posts.length / pageSize));
+const pagePosts = posts.slice(0, pageSize);
 ---
 
 <BaseLayout title="归档" description="全部文章归档。">
   <header class="archive-header">
     <h1>归档</h1>
-    <span>{posts.length}</span>
+    <span>共 {posts.length} 篇文章</span>
   </header>
-  {
-    posts.length > 0 ? (
-      <ul class="archive-list">
-        {posts.map((post) => (
-          <li>
-            <time datetime={post.data.publishedAt.toISOString()}>
-              {post.data.publishedAt.toISOString().slice(0, 10)}
-            </time>
-            <a href={`/posts/${post.id.replace(/\.(md|mdx)$/, "")}/`}>{post.data.title}</a>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p class="empty-state">暂无文章。</p>
-    )
-  }
+  <ArchiveList posts={pagePosts} />
+  <Pagination currentPage={1} totalPages={totalPages} />
 </BaseLayout>
 
 <style>
@@ -49,41 +40,4 @@ const posts = sortPosts((await getCollection("posts")).filter(isPublished));
     font-size: 0.68rem;
   }
 
-  .archive-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .archive-list li {
-    display: grid;
-    grid-template-columns: 105px minmax(0, 1fr);
-    gap: 1rem;
-    padding: 0.55rem 0;
-  }
-
-  .archive-list time {
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: 0.7rem;
-  }
-
-  .archive-list a {
-    color: var(--text);
-    font-size: 0.88rem;
-    text-decoration: underline;
-    text-decoration-color: var(--line);
-  }
-
-  .archive-list a:hover {
-    color: var(--accent);
-  }
-
-  @media (max-width: 520px) {
-    .archive-list li {
-      grid-template-columns: 1fr;
-      gap: 0;
-      padding: 0.75rem 0;
-    }
-  }
 </style>

@@ -1,0 +1,66 @@
+---
+import type { Post } from "../utils/posts";
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+{
+  posts.length > 0 ? (
+    <ul class="archive-list">
+      {posts.map((post) => (
+        <li>
+          <time datetime={post.data.publishedAt.toISOString()}>
+            {post.data.publishedAt.toISOString().slice(0, 10)}
+          </time>
+          <a href={`/posts/${post.id.replace(/\.(md|mdx)$/, "")}/`}>{post.data.title}</a>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p class="empty-state">暂无文章。</p>
+  )
+}
+
+<style>
+  .archive-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .archive-list li {
+    display: grid;
+    grid-template-columns: 105px minmax(0, 1fr);
+    gap: 1rem;
+    padding: 0.55rem 0;
+  }
+
+  .archive-list time {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+  }
+
+  .archive-list a {
+    color: var(--text);
+    font-size: 0.88rem;
+    text-decoration: underline;
+    text-decoration-color: var(--line);
+  }
+
+  .archive-list a:hover {
+    color: var(--accent);
+  }
+
+  @media (max-width: 520px) {
+    .archive-list li {
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding: 0.75rem 0;
+    }
+  }
+</style>

@@ -1,0 +1,60 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ArchiveList from "../../../components/ArchiveList.astro";
+import Pagination from "../../../components/Pagination.astro";
+import { isPublished, sortPosts } from "../../../utils/posts";
+
+export async function getStaticPaths() {
+  const pageSize = 10;
+  const posts = sortPosts((await getCollection("posts")).filter(isPublished));
+  const totalPages = Math.max(1, Math.ceil(posts.length / pageSize));
+
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => {
+    const currentPage = index + 2;
+    const start = (currentPage - 1) * pageSize;
+
+    return {
+      params: { page: String(currentPage) },
+      props: {
+        currentPage,
+        totalPages,
+        totalPosts: posts.length,
+        posts: posts.slice(start, start + pageSize),
+      },
+    };
+  });
+}
+
+const { currentPage, totalPages, totalPosts, posts } = Astro.props;
+---
+
+<BaseLayout title={`归档 · 第 ${currentPage} 页`} description="全部文章归档。">
+  <header class="archive-header">
+    <h1>归档</h1>
+    <span>共 {totalPosts} 篇文章</span>
+  </header>
+  <ArchiveList posts={posts} />
+  <Pagination currentPage={currentPage} totalPages={totalPages} />
+</BaseLayout>
+
+<style>
+  .archive-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    margin: 3.5rem 0 2rem;
+  }
+
+  .archive-header h1 {
+    margin: 0;
+    color: var(--text-strong);
+    font-size: 1.35rem;
+  }
+
+  .archive-header span {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.68rem;
+  }
+</style>

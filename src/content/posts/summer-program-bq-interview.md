@@ -1,5 +1,5 @@
 ---
-title: "某外资暑假项目 BQ 面经"
+title: "某外资暑假项目 BQ 面试记录"
 description: "其实面完就感觉心里有点凉凉了……BQ 还是太玄学了。"
 publishedAt: 2026-07-30
 draft: false

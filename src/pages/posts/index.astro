@@ -1,0 +1,25 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+import { isPublished, sortPosts } from "../../utils/posts";
+
+const posts = sortPosts((await getCollection("posts")).filter(isPublished));
+---
+
+<BaseLayout title="所有文章" description="Biscuit Blog 的全部文章。">
+  <header class="page-intro shell">
+    <p class="eyebrow">ARCHIVE · {String(posts.length).padStart(2, "0")}</p>
+    <h1 class="display-title">所有文章</h1>
+    <p>按时间整理的写作存档。新的在前，旧的也不急着遗忘。</p>
+  </header>
+  <section class="post-list shell">
+    {posts.length > 0 ? posts.map((post, index) => <PostCard post={post} index={index} />) : <p class="empty-state">还没有公开文章。</p>}
+  </section>
+</BaseLayout>
+
+<style>
+  .post-list {
+    padding-top: 3rem;
+  }
+</style>

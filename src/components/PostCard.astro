@@ -1,0 +1,152 @@
+---
+import type { Post } from "../utils/posts";
+import { formatDate, readingTime, tagSlug } from "../utils/posts";
+
+interface Props {
+  post: Post;
+  featured?: boolean;
+  index?: number;
+}
+
+const { post, featured = false, index = 0 } = Astro.props;
+const href = `/posts/${post.id.replace(/\.(md|mdx)$/, "")}/`;
+---
+
+<article class:list={["post-card", { featured }]}>
+  <div class="post-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</div>
+  <div class="post-content">
+    <div class="post-meta">
+      <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+      <span aria-hidden="true">·</span>
+      <span>{readingTime(post.body)} 分钟阅读</span>
+    </div>
+    <h3><a href={href}>{post.data.title}</a></h3>
+    <p>{post.data.description}</p>
+    <div class="post-tags">
+      {post.data.tags.map((tag) => <a class="tag" href={`/tags/${tagSlug(tag)}/`}>{tag}</a>)}
+    </div>
+  </div>
+  <a class="post-arrow" href={href} aria-label={`阅读《${post.data.title}》`}>↗</a>
+</article>
+
+<style>
+  .post-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 50px minmax(0, 1fr) auto;
+    gap: 1.25rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .post-card:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .post-card::before {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    transform: scaleY(0.2);
+    opacity: 0;
+    background: var(--paper-raised);
+    content: "";
+    transition:
+      transform 180ms ease,
+      opacity 180ms ease;
+  }
+
+  .post-card:hover::before {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+
+  .post-number {
+    padding-top: 0.2rem;
+    color: var(--faint);
+    font-family: var(--mono);
+    font-size: 0.68rem;
+  }
+
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.67rem;
+    letter-spacing: 0.02em;
+  }
+
+  h3 {
+    max-width: 720px;
+    margin: 0.65rem 0 0;
+    font-family: var(--serif);
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    letter-spacing: -0.03em;
+    line-height: 1.28;
+  }
+
+  h3 a {
+    background-image: linear-gradient(var(--accent), var(--accent));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0 1px;
+    transition: background-size 220ms ease;
+  }
+
+  .post-card:hover h3 a {
+    background-size: 100% 1px;
+  }
+
+  .post-content > p {
+    max-width: 650px;
+    margin: 0.75rem 0 1.1rem;
+    color: var(--muted);
+    font-family: var(--serif);
+    font-size: 0.95rem;
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .post-arrow {
+    display: grid;
+    width: 40px;
+    height: 40px;
+    place-items: center;
+    align-self: center;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    color: var(--muted);
+    transition:
+      transform 160ms ease,
+      color 160ms ease,
+      border-color 160ms ease;
+  }
+
+  .post-card:hover .post-arrow {
+    transform: rotate(45deg);
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .featured h3 {
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
+  }
+
+  @media (max-width: 620px) {
+    .post-card {
+      grid-template-columns: 30px minmax(0, 1fr);
+      gap: 0.8rem;
+      padding: 1.6rem 0;
+    }
+
+    .post-arrow {
+      display: none;
+    }
+  }
+</style>

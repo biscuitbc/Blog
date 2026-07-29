@@ -1,0 +1,145 @@
+---
+import type { Post } from "../utils/posts";
+import { render } from "astro:content";
+import BaseLayout from "./BaseLayout.astro";
+import { formatDate, readingTime, tagSlug } from "../utils/posts";
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description} article>
+  <article>
+    <header class="article-header reading-shell">
+      <a class="back-link" href="/posts/">← 返回文章</a>
+      <div class="article-meta">
+        <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+        <span aria-hidden="true">·</span>
+        <span>{readingTime(post.body)} 分钟阅读</span>
+      </div>
+      <h1>{post.data.title}</h1>
+      <p class="article-deck">{post.data.description}</p>
+      <div class="article-tags">
+        {post.data.tags.map((tag) => <a class="tag" href={`/tags/${tagSlug(tag)}/`}>{tag}</a>)}
+      </div>
+    </header>
+
+    <div class="article-rule shell" aria-hidden="true">
+      <span></span><i></i>
+    </div>
+
+    <div class="prose reading-shell">
+      <Content />
+    </div>
+
+    <footer class="article-footer reading-shell">
+      <div>
+        <p class="eyebrow">THE END</p>
+        <p>感谢读到这里。</p>
+      </div>
+      <a href="/posts/">继续阅读 <span aria-hidden="true">→</span></a>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .article-header {
+    padding: clamp(4rem, 10vw, 8rem) 0 3.5rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 3rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.1rem;
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+  }
+
+  h1 {
+    max-width: 740px;
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 7vw, 5.4rem);
+    letter-spacing: -0.055em;
+    line-height: 1.06;
+  }
+
+  .article-deck {
+    max-width: 650px;
+    margin: 1.5rem 0;
+    color: var(--muted);
+    font-family: var(--serif);
+    font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+  }
+
+  .article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .article-rule {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 4.5rem;
+  }
+
+  .article-rule span {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .article-rule i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--mark);
+  }
+
+  .article-footer {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-top: 5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .article-footer p {
+    margin: 0;
+    color: var(--muted);
+    font-family: var(--serif);
+  }
+
+  .article-footer .eyebrow {
+    margin-bottom: 0.25rem;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+
+  .article-footer > a {
+    padding-bottom: 0.2rem;
+    border-bottom: 1px solid var(--ink);
+    font-size: 0.85rem;
+  }
+</style>

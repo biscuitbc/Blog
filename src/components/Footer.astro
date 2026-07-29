@@ -1,0 +1,80 @@
+---
+import { site } from "../config/site";
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="shell footer-grid">
+    <div>
+      <p class="footer-name">{site.title}</p>
+      <p class="footer-note">{site.description}</p>
+    </div>
+    <div class="footer-links">
+      <a href="/rss.xml">RSS</a>
+      <a href={site.github} target="_blank" rel="noreferrer">GitHub ↗</a>
+      <a href={site.mainSite} target="_blank" rel="noreferrer">主站 ↗</a>
+    </div>
+    <p class="copyright">© {year} {site.author}. Built with Astro.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: 7rem;
+    padding: 3rem 0 5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr auto;
+    align-items: end;
+    gap: 2rem;
+  }
+
+  .footer-name {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .footer-note,
+  .copyright {
+    margin: 0.35rem 0 0;
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.2rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+  }
+
+  .footer-links a:hover {
+    color: var(--accent);
+  }
+
+  .copyright {
+    text-align: right;
+  }
+
+  @media (max-width: 760px) {
+    .site-footer {
+      margin-top: 5rem;
+      padding-bottom: 6rem;
+    }
+
+    .footer-grid {
+      grid-template-columns: 1fr;
+      align-items: start;
+      gap: 1.4rem;
+    }
+
+    .copyright {
+      text-align: left;
+    }
+  }
+</style>

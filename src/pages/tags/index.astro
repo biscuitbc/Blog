@@ -1,0 +1,80 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { isPublished, tagSlug } from "../../utils/posts";
+
+const posts = (await getCollection("posts")).filter(isPublished);
+const counts = posts.reduce<Record<string, number>>((result, post) => {
+  for (const tag of post.data.tags) result[tag] = (result[tag] ?? 0) + 1;
+  return result;
+}, {});
+const tags = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "zh-CN"));
+---
+
+<BaseLayout title="标签" description="按主题浏览 Biscuit Blog。">
+  <header class="page-intro shell">
+    <p class="eyebrow">TOPICS · {String(tags.length).padStart(2, "0")}</p>
+    <h1 class="display-title">标签</h1>
+    <p>思想不会严格分类，但关键词可以帮助我们再次找到它们。</p>
+  </header>
+  <section class="tag-cloud shell">
+    {tags.map(([tag, count], index) => (
+      <a href={`/tags/${tagSlug(tag)}/`}>
+        <span>{String(index + 1).padStart(2, "0")}</span>
+        <strong>{tag}</strong>
+        <small>{count} 篇</small>
+        <i aria-hidden="true">↗</i>
+      </a>
+    ))}
+  </section>
+</BaseLayout>
+
+<style>
+  .tag-cloud {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 3rem;
+    padding-top: 4rem;
+  }
+
+  .tag-cloud a {
+    display: grid;
+    grid-template-columns: 36px 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .tag-cloud span,
+  .tag-cloud small {
+    color: var(--faint);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+  }
+
+  .tag-cloud strong {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+  }
+
+  .tag-cloud i {
+    color: var(--muted);
+    font-style: normal;
+    transition: transform 160ms ease;
+  }
+
+  .tag-cloud a:hover {
+    color: var(--accent);
+  }
+
+  .tag-cloud a:hover i {
+    transform: translate(2px, -2px);
+  }
+
+  @media (max-width: 700px) {
+    .tag-cloud {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

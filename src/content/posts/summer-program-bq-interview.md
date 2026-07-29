@@ -2,7 +2,6 @@
 title: "某外资暑假项目 BQ 面经"
 description: "其实面完就感觉心里有点凉凉了……BQ 还是太玄学了。"
 publishedAt: 2026-07-30
-tags: ["面经", "实习"]
 draft: false
 featured: false
 ---
